@@ -1,0 +1,5 @@
+package messages;
+
+message ServerRequestPing {
+    required string text = 1;
+}
