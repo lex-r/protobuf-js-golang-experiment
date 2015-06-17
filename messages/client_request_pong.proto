@@ -1,0 +1,5 @@
+package messages;
+
+message ClientRequestPong {
+    required string text = 1;
+}

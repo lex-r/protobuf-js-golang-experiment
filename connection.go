@@ -52,15 +52,25 @@ func (c *connection) readPump() {
 			break
 		}
 		log.Printf("Read message %v %v", message, string(message))
-		mess := &messages.ServerRequest{}
-		err = proto.Unmarshal(message, mess);
+		req := &messages.ServerRequest{}
+		err = proto.Unmarshal(message, req);
 		if err != nil {
 			log.Fatal("unmarshaling error: ", err)
 		}
-		log.Printf("Unmarshaled method %v, request %v", *mess.Method, *mess.RequestPing.Text)
+		log.Printf("Unmarshaled method %v, request %v", *req.Method, *req.RequestPing.Text)
 
 		fmt.Print("Read message\n")
-		h.broadcast <- message
+
+		resp := &messages.ClientRequest{}
+		resp.Method = proto.String("pong")
+		resp.RequestPong = &messages.ClientRequestPong{Text:proto.String("Pong")}
+
+		response, err := proto.Marshal(resp)
+		if err != nil {
+			log.Fatal("Marshal error: ", err)
+		}
+
+		h.broadcast <- response
 	}
 }
 

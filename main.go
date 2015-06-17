@@ -33,7 +33,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 	http.HandleFunc("/ws", handler)
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8090", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

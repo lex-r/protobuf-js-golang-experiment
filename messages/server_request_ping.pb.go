@@ -2,16 +2,6 @@
 // source: server_request_ping.proto
 // DO NOT EDIT!
 
-/*
-Package messages is a generated protocol buffer package.
-
-It is generated from these files:
-	server_request_ping.proto
-	server_request.proto
-
-It has these top-level messages:
-	ServerRequestPing
-*/
 package messages
 
 import proto "github.com/golang/protobuf/proto"

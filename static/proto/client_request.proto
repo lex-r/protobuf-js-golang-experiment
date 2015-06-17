@@ -1,0 +1,9 @@
+import "client_request_pong.proto";
+
+package messages;
+
+message ClientRequest {
+    required string method = 1;
+
+    optional ClientRequestPong requestPong = 2;
+}

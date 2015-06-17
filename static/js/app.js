@@ -1,5 +1,5 @@
 var ws = null;
-var wsurl = "ws://127.0.0.1:8080/ws";
+var wsurl = "ws://127.0.0.1:8090/ws";
 
 window.onload = function() {
     ws = new WebSocket(wsurl);
