@@ -7,10 +7,6 @@ package main
 import (
 	"github.com/gorilla/websocket"
 	"time"
-	"fmt"
-	"log"
-	"github.com/golang/protobuf/proto"
-	"github.com/lex-r/protobuf-js-golang-experiment/messages"
 )
 
 const (
@@ -51,26 +47,8 @@ func (c *connection) readPump() {
 		if err != nil {
 			break
 		}
-		log.Printf("Read message %v %v", message, string(message))
-		req := &messages.ServerRequest{}
-		err = proto.Unmarshal(message, req);
-		if err != nil {
-			log.Fatal("unmarshaling error: ", err)
-		}
-		log.Printf("Unmarshaled method %v, request %v", *req.Method, *req.RequestPing.Text)
 
-		fmt.Print("Read message\n")
-
-		resp := &messages.ClientRequest{}
-		resp.Method = proto.String("pong")
-		resp.RequestPong = &messages.ClientRequestPong{Text:proto.String("Pong")}
-
-		response, err := proto.Marshal(resp)
-		if err != nil {
-			log.Fatal("Marshal error: ", err)
-		}
-
-		h.broadcast <- response
+		service.handle(c, message)
 	}
 }
 

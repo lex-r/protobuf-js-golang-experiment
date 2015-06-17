@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"github.com/gorilla/websocket"
 	"log"
+	"github.com/lex-r/protobuf-js-golang-experiment/messages"
+	"github.com/golang/protobuf/proto"
 )
 
 var upgrader = websocket.Upgrader{
@@ -28,7 +30,24 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	c.readPump()
 }
 
+var service = Service{functions:make(map[string]func(*connection, *messages.ServerRequest))}
+
 func main() {
+
+	service.register("ping", func(c *connection, req *messages.ServerRequest) {
+		resp := &messages.ClientRequest{}
+		resp.Method = proto.String("pong")
+		resp.RequestPong = &messages.ClientRequestPong{Text:proto.String("Pong")}
+
+		response, err := proto.Marshal(resp)
+		if err != nil {
+			log.Print("Marshal error: ", err)
+			return
+		}
+
+		c.send <- response
+	})
+
 	go h.run()
 	http.Handle("/", http.FileServer(http.Dir("./static")))
 	http.HandleFunc("/ws", handler)
